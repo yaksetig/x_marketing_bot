@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 import os
 import time
-import openai
 from dotenv import load_dotenv
+from openai import OpenAI
 import tweepy
 
-# Load environment variables from .env
 load_dotenv()
 
-# OpenAI configuration
-openai.api_key = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 PROMPT = os.getenv(
     "PROMPT",
-    "Write a punchy marketing tweet about our new product launch that engages our audience and highlights key benefits."
+    "Write a single original marketing tweet of up to 280 characters in a professional yet modern tone. Call out the pain of time-wasting captchas and bot-fighting boredom, then highlight how GotCHA’s gameplay makes verification fast, fun, and frustration-free. The output should not have any quotation marks. Make sure your tweets are very original and not generic since they can never repeated."
+
 )
 
 # Twitter API credentials
@@ -35,20 +36,19 @@ twitter_client = tweepy.Client(
 
 def generate_marketing_tweet():
     """
-    Use OpenAI's ChatCompletion to generate a marketing tweet.
+    Generate a marketing tweet using OpenAI.
     """
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a creative marketing assistant."},
+            {"role": "system", "content": "You are the Chief Marketing Officer of GotCHA (Games Orchestrated to Tell Computers and Humans Apart), a company that turns dull CAPTCHAs into quick, engaging mini-games."},
             {"role": "user", "content": PROMPT}
         ],
         max_tokens=100,
         temperature=0.8
     )
     text = response.choices[0].message.content.strip()
-    # Ensure tweet length <= 280 characters
-    return text[:280]
+    return text[:280]  # Ensure max length
 
 
 def post_to_twitter(text: str):
@@ -66,5 +66,4 @@ if __name__ == "__main__":
             post_to_twitter(tweet)
         except Exception as e:
             print(f"Error: {e}")
-        # Sleep for 24 hours
-        time.sleep(24 * 60 * 60)
+        time.sleep(24 * 60 * 60)  # Sleep for 24 hours
