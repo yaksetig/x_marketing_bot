@@ -27,12 +27,11 @@ Run the bot:
    chmod +x daily_bot.py
    ./daily_bot.py
 
-It will:
+### It will:
+- Generate a tweet using OpenAI's GPT-3.5-turbo.
 
-Generate a tweet using OpenAI's GPT-3.5-turbo.
+- Post it to Twitter via the Tweepy client.
 
-Post it to Twitter via the Tweepy client.
+- Sleep for 24 hours, then repeat.
 
-Sleep for 24 hours, then repeat.
-
-Keep the script running on your CLI, and it will automatically post one marketing tweet per day.
+## Keep the script running on your CLI, and it will automatically post one marketing tweet per day.
